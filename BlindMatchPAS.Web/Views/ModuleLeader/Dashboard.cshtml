@@ -1,0 +1,72 @@
+﻿@model IEnumerable<BlindMatchPAS.Core.Entities.Project>
+
+@{
+    ViewData["Title"] = "Module Leader Dashboard";
+    var matches = ViewBag.Matches as IEnumerable<BlindMatchPAS.Core.Entities.Match>;
+}
+
+<h2>Module Leader Dashboard</h2>
+
+<div class="mb-3">
+    <strong>Total Projects:</strong> @ViewBag.TotalProjects |
+    <strong>Pending Projects:</strong> @ViewBag.PendingProjects |
+    <strong>Total Matches:</strong> @ViewBag.TotalMatches |
+    <strong>Confirmed Matches:</strong> @ViewBag.ConfirmedMatches
+</div>
+
+<p>
+    <a asp-action="ResearchAreas" class="btn btn-primary">Manage Research Areas</a>
+</p>
+
+<h4>All Projects</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Student</th>
+            <th>Research Area</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var project in Model)
+    {
+        <tr>
+            <td>@project.Title</td>
+            <td>@project.Student?.FullName</td>
+            <td>@project.ResearchArea?.Name</td>
+            <td>@project.Status</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<h4>All Matches</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Supervisor</th>
+            <th>Status</th>
+            <th>Student</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (matches != null)
+    {
+        foreach (var match in matches)
+        {
+            <tr>
+                <td>@match.Project?.Title</td>
+                <td>@match.Supervisor?.FullName</td>
+                <td>@match.Status</td>
+                <td>@match.Project?.Student?.FullName</td>
+                <td>
+                    <a asp-action="Reassign" asp-route-matchId="@match.Id" class="btn btn-warning btn-sm">Reassign</a>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
