@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BlindMatchPAS.Core/BlindMatchPAS.Core.csproj" />
+  <Project Path="BlindMatchPAS.Infrastructure/BlindMatchPAS.Infrastructure.csproj" />
+  <Project Path="BlindMatchPAS.Tests/BlindMatchPAS.Tests.csproj" />
+  <Project Path="BlindMatchPAS.Web/BlindMatchPAS.Web.csproj" />
+</Solution>
