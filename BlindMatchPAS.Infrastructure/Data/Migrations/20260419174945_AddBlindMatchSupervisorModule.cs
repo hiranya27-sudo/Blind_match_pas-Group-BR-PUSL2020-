@@ -11,6 +11,14 @@ namespace BlindMatchPAS.Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Projects_AspNetUsers_StudentId",
+                table: "Projects");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Projects_ResearchAreas_ResearchAreaId",
+                table: "Projects");
+
             migrationBuilder.CreateTable(
                 name: "Matches",
                 columns: table => new
@@ -31,13 +39,13 @@ namespace BlindMatchPAS.Infrastructure.Data.Migrations
                         column: x => x.SupervisorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Matches_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,13 +65,13 @@ namespace BlindMatchPAS.Infrastructure.Data.Migrations
                         column: x => x.SupervisorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SupervisorExpertises_ResearchAreas_ResearchAreaId",
                         column: x => x.ResearchAreaId,
                         principalTable: "ResearchAreas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -85,16 +93,56 @@ namespace BlindMatchPAS.Infrastructure.Data.Migrations
                 name: "IX_SupervisorExpertises_SupervisorId",
                 table: "SupervisorExpertises",
                 column: "SupervisorId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Projects_AspNetUsers_StudentId",
+                table: "Projects",
+                column: "StudentId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Projects_ResearchAreas_ResearchAreaId",
+                table: "Projects",
+                column: "ResearchAreaId",
+                principalTable: "ResearchAreas",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Projects_AspNetUsers_StudentId",
+                table: "Projects");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Projects_ResearchAreas_ResearchAreaId",
+                table: "Projects");
+
             migrationBuilder.DropTable(
                 name: "Matches");
 
             migrationBuilder.DropTable(
                 name: "SupervisorExpertises");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Projects_AspNetUsers_StudentId",
+                table: "Projects",
+                column: "StudentId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Projects_ResearchAreas_ResearchAreaId",
+                table: "Projects",
+                column: "ResearchAreaId",
+                principalTable: "ResearchAreas",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlindMatchPAS.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260419173518_AddBlindMatchSupervisorModule")]
+    [Migration("20260419174945_AddBlindMatchSupervisorModule")]
     partial class AddBlindMatchSupervisorModule
     {
         /// <inheritdoc />
@@ -347,13 +347,13 @@ namespace BlindMatchPAS.Infrastructure.Data.Migrations
                     b.HasOne("BlindMatchPAS.Core.Entities.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BlindMatchPAS.Core.Entities.ApplicationUser", "Supervisor")
                         .WithMany()
                         .HasForeignKey("SupervisorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Project");
@@ -366,13 +366,13 @@ namespace BlindMatchPAS.Infrastructure.Data.Migrations
                     b.HasOne("BlindMatchPAS.Core.Entities.ResearchArea", "ResearchArea")
                         .WithMany()
                         .HasForeignKey("ResearchAreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BlindMatchPAS.Core.Entities.ApplicationUser", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ResearchArea");
@@ -385,13 +385,13 @@ namespace BlindMatchPAS.Infrastructure.Data.Migrations
                     b.HasOne("BlindMatchPAS.Core.Entities.ResearchArea", "ResearchArea")
                         .WithMany()
                         .HasForeignKey("ResearchAreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BlindMatchPAS.Core.Entities.ApplicationUser", "Supervisor")
                         .WithMany()
                         .HasForeignKey("SupervisorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ResearchArea");
