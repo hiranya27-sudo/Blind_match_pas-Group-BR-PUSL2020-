@@ -33,6 +33,8 @@ namespace BlindMatchPAS.Web.Controllers
             var matches = await _context.Matches
                 .Include(m => m.Project)
                     .ThenInclude(p => p!.ResearchArea)
+                .Include(m => m.Project)
+                    .ThenInclude(p => p!.Student)
                 .Where(m => m.SupervisorId == user!.Id)
                 .ToListAsync();
 

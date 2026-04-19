@@ -46,7 +46,7 @@
                 <td>
                     @if (match.IdentityRevealed)
                     {
-                        @match.Project?.StudentId
+                        <span>@match.Project?.Student?.FullName (@match.Project?.Student?.Email)</span>
                     }
                     else
                     {
