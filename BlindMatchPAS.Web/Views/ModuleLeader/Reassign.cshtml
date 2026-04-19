@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Reassign Match";
+    var match = ViewBag.Match as BlindMatchPAS.Core.Entities.Match;
+    var supervisors = ViewBag.Supervisors as IEnumerable<BlindMatchPAS.Core.Entities.ApplicationUser>;
+}
+
+<h2>Reassign Match</h2>
+
+@if (match != null)
+{
+    <p><strong>Project:</strong> @match.Project?.Title</p>
+    <p><strong>Research Area:</strong> @match.Project?.ResearchArea?.Name</p>
+}
+
+<form asp-action="Reassign" method="post">
+    <input type="hidden" name="matchId" value="@match?.Id" />
+
+    <div class="mb-3">
+        <label>Select New Supervisor</label>
+        <select name="newSupervisorId" class="form-control">
+            @if (supervisors != null)
+            {
+                foreach (var supervisor in supervisors)
+                {
+                    <option value="@supervisor.Id">@supervisor.FullName</option>
+                }
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Reassign</button>
+</form>
