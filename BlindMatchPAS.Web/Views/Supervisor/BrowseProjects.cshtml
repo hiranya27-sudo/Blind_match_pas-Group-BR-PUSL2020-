@@ -1,0 +1,35 @@
+﻿@model IEnumerable<BlindMatchPAS.Core.Entities.Project>
+
+@{
+    ViewData["Title"] = "Browse Anonymous Projects";
+}
+
+<h2>Browse Anonymous Projects</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Abstract</th>
+            <th>Research Area</th>
+            <th>Student</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in Model)
+        {
+            <tr>
+                <td>@project.Title</td>
+                <td>@project.Abstract</td>
+                <td>@project.ResearchArea?.Name</td>
+                <td>Hidden</td>
+                <td>
+                    <form asp-action="ExpressInterest" asp-route-projectId="@project.Id" method="post">
+                        <button type="submit" class="btn btn-warning btn-sm">Express Interest</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
