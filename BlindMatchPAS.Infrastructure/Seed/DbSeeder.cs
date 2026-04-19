@@ -1,5 +1,6 @@
 ﻿using BlindMatchPAS.Core.Entities;
 using BlindMatchPAS.Core.Enums;
+using BlindMatchPAS.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 
 namespace BlindMatchPAS.Infrastructure.Seed
@@ -8,7 +9,8 @@ namespace BlindMatchPAS.Infrastructure.Seed
     {
         public static async Task SeedRolesAndAdminAsync(
             RoleManager<IdentityRole> roleManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            AppDbContext context)
         {
             string[] roles =
             {
@@ -47,6 +49,18 @@ namespace BlindMatchPAS.Infrastructure.Seed
                 {
                     await userManager.AddToRoleAsync(adminUser, Roles.Admin);
                 }
+            }
+
+            if (!context.ResearchAreas.Any())
+            {
+                context.ResearchAreas.AddRange(
+                    new ResearchArea { Name = "Artificial Intelligence" },
+                    new ResearchArea { Name = "Cybersecurity" },
+                    new ResearchArea { Name = "Data Science" },
+                    new ResearchArea { Name = "Software Engineering" }
+                );
+
+                await context.SaveChangesAsync();
             }
         }
     }
