@@ -1,0 +1,41 @@
+﻿@model BlindMatchPAS.Web.ViewModels.ProjectViewModel
+
+@{
+    ViewData["Title"] = "Submit Proposal";
+}
+
+<h2>Submit Proposal</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Abstract"></label>
+        <textarea asp-for="Abstract" class="form-control"></textarea>
+        <span asp-validation-for="Abstract" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ResearchAreaId"></label>
+        <select asp-for="ResearchAreaId" class="form-control">
+            <option value="">-- Select Research Area --</option>
+            @foreach (var area in ViewBag.ResearchAreas)
+            {
+                <option value="@area.Id">@area.Name</option>
+            }
+        </select>
+        <span asp-validation-for="ResearchAreaId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
