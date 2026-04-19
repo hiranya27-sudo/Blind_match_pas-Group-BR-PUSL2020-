@@ -39,6 +39,13 @@
                                 <a class="nav-link text-dark" asp-controller="Supervisor" asp-action="Dashboard">Supervisor Dashboard</a>
                             </li>
                         }
+                        @if (User.Identity != null && User.Identity.IsAuthenticated &&
+                        (User.IsInRole("ModuleLeader") || User.IsInRole("Admin")))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="ModuleLeader" asp-action="Dashboard">Module Leader Dashboard</a>
+                            </li>
+                        }
                     </ul>
 
                     <ul class="navbar-nav">
