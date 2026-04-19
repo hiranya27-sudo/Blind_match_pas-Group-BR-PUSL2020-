@@ -33,6 +33,12 @@
                                 <a class="nav-link text-dark" asp-controller="Student" asp-action="Dashboard">Student Dashboard</a>
                             </li>
                         }
+                        @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Supervisor"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Supervisor" asp-action="Dashboard">Supervisor Dashboard</a>
+                            </li>
+                        }
                     </ul>
 
                     <ul class="navbar-nav">
