@@ -1,0 +1,38 @@
+﻿@model IEnumerable<BlindMatchPAS.Core.Entities.ResearchArea>
+
+@{
+    ViewData["Title"] = "Research Areas";
+}
+
+<h2>Research Areas</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="text-danger mb-3">@TempData["Error"]</div>
+}
+
+<p>
+    <a asp-action="CreateResearchArea" class="btn btn-primary">Add Research Area</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var area in Model)
+        {
+            <tr>
+                <td>@area.Name</td>
+                <td>
+                    <form asp-action="DeleteResearchArea" asp-route-id="@area.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
