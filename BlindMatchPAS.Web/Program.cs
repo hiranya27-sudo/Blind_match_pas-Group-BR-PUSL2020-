@@ -29,8 +29,9 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    var context = services.GetRequiredService<AppDbContext>();
 
-    await DbSeeder.SeedRolesAndAdminAsync(roleManager, userManager);
+    await DbSeeder.SeedRolesAndAdminAsync(roleManager, userManager, context);
 }
 
 if (!app.Environment.IsDevelopment())

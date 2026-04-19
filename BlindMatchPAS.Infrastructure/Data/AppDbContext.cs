@@ -10,6 +10,8 @@ namespace BlindMatchPAS.Infrastructure.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ResearchArea> ResearchAreas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
