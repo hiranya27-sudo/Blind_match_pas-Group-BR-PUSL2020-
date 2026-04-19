@@ -1,0 +1,67 @@
+﻿@model IEnumerable<BlindMatchPAS.Core.Entities.Match>
+
+@{
+    ViewData["Title"] = "Supervisor Dashboard";
+    var expertises = ViewBag.Expertises as IEnumerable<BlindMatchPAS.Core.Entities.SupervisorExpertise>;
+}
+
+<h2>Supervisor Dashboard</h2>
+
+<p>
+    <a asp-action="AddExpertise" class="btn btn-primary">Add Expertise</a>
+    <a asp-action="BrowseProjects" class="btn btn-secondary">Browse Anonymous Projects</a>
+</p>
+
+<h4>Your Expertise Areas</h4>
+<ul>
+    @if (expertises != null)
+    {
+        foreach (var item in expertises)
+        {
+            <li>@item.ResearchArea?.Name</li>
+        }
+    }
+</ul>
+
+<h4>Your Matches</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Project Title</th>
+            <th>Research Area</th>
+            <th>Status</th>
+            <th>Identity Visible</th>
+            <th>Student</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var match in Model)
+        {
+            <tr>
+                <td>@match.Project?.Title</td>
+                <td>@match.Project?.ResearchArea?.Name</td>
+                <td>@match.Status</td>
+                <td>@match.IdentityRevealed</td>
+                <td>
+                    @if (match.IdentityRevealed)
+                    {
+                        @match.Project?.StudentId
+                    }
+                    else
+                    {
+                        <span>Hidden</span>
+                    }
+                </td>
+                <td>
+                    @if (match.Status == BlindMatchPAS.Core.Enums.MatchStatus.Interested)
+                    {
+                        <form asp-action="ConfirmMatch" asp-route-matchId="@match.Id" method="post">
+                            <button type="submit" class="btn btn-success btn-sm">Confirm Match</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
