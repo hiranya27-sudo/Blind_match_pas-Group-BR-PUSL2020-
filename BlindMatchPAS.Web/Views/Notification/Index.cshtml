@@ -4,33 +4,66 @@
     ViewData["Title"] = "Notifications";
 }
 
-<h2>Notifications</h2>
+<div class="pas-page-header">
+    <h2>Notifications</h2>
+    <p>Your recent system notifications</p>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Message</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var notification in Model)
-        {
-            <tr>
-                <td>@notification.Message</td>
-                <td>@notification.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@(notification.IsRead ? "Read" : "Unread")</td>
-                <td>
-                    @if (!notification.IsRead)
+<div class="pas-card">
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="pas-table">
+                <thead>
+                    <tr>
+                        <th>Message</th>
+                        <th style="width:160px;">Date &amp; Time</th>
+                        <th style="width:100px;">Status</th>
+                        <th style="width:130px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var notification in Model)
                     {
-                        <form asp-action="MarkAsRead" asp-route-id="@notification.Id" method="post">
-                            <button type="submit" class="btn btn-sm btn-primary">Mark as Read</button>
-                        </form>
+                        <tr style="@(!notification.IsRead ? "background:var(--pas-blue-light);" : "")">
+                            <td style="font-weight:@(!notification.IsRead ? "600" : "400");">
+                                @notification.Message
+                            </td>
+                            <td style="color:var(--pas-gray-text);font-size:0.85rem;">
+                                @notification.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                            </td>
+                            <td>
+                                @if (notification.IsRead)
+                                {
+                                    <span class="badge-status badge-read">Read</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-status badge-unread">Unread</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!notification.IsRead)
+                                {
+                                    <form asp-action="MarkAsRead" asp-route-id="@notification.Id" method="post">
+                                        <button type="submit" class="btn-pas-primary"
+                                                style="font-size:0.78rem;padding:0.32rem 0.75rem;">
+                                            Mark as Read
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon">🔔</div>
+            <p>You have no notifications yet.</p>
+        </div>
+    }
+</div>
