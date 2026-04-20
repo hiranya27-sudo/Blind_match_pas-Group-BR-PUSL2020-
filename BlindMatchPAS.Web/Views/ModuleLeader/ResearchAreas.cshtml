@@ -4,35 +4,58 @@
     ViewData["Title"] = "Research Areas";
 }
 
-<h2>Research Areas</h2>
+<div class="pas-page-header d-flex justify-content-between align-items-start flex-wrap gap-2">
+    <div>
+        <h2>Research Areas</h2>
+        <p>Manage the research areas available for project allocation</p>
+    </div>
+    <a asp-action="CreateResearchArea" class="btn-pas-orange">+ Add Research Area</a>
+</div>
 
 @if (TempData["Error"] != null)
 {
-    <div class="text-danger mb-3">@TempData["Error"]</div>
+    <div class="alert-pas-error">
+        <strong>Error:</strong> @TempData["Error"]
+    </div>
 }
 
-<p>
-    <a asp-action="CreateResearchArea" class="btn btn-primary">Add Research Area</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var area in Model)
-        {
-            <tr>
-                <td>@area.Name</td>
-                <td>
-                    <form asp-action="DeleteResearchArea" asp-route-id="@area.Id" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="pas-card">
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="pas-table">
+                <thead>
+                    <tr>
+                        <th>Research Area Name</th>
+                        <th style="width:120px;text-align:right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var area in Model)
+                    {
+                        <tr>
+                            <td style="font-weight:500;">@area.Name</td>
+                            <td style="text-align:right;">
+                                <form asp-action="DeleteResearchArea" asp-route-id="@area.Id"
+                                      method="post" style="display:inline;">
+                                    <button type="submit" class="btn-pas-danger"
+                                            style="font-size:0.8rem;padding:0.35rem 0.85rem;"
+                                            onclick="return confirm('Delete this research area?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon">🏷️</div>
+            <p>No research areas added yet. Add one to get started.</p>
+        </div>
+    }
+</div>

@@ -4,19 +4,32 @@
     ViewData["Title"] = "Create Research Area";
 }
 
-<h2>Create Research Area</h2>
+<div class="pas-page-header">
+    <h2>Create Research Area</h2>
+    <p>Add a new research area for project allocation</p>
+</div>
 
-<form asp-action="CreateResearchArea" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
+<div class="pas-card" style="max-width:520px;">
+    <form asp-action="CreateResearchArea" method="post">
+        @if (ViewData.ModelState.ErrorCount > 0)
+        {
+            <div class="alert-pas-error">
+                <div asp-validation-summary="All"></div>
+            </div>
+        }
 
-    <div class="mb-3">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
+        <div class="mb-4">
+            <label asp-for="Name" class="form-label">Research Area Name</label>
+            <input asp-for="Name" class="form-control" placeholder="e.g. Machine Learning, Cybersecurity..." />
+            <span asp-validation-for="Name" class="text-danger" style="font-size:0.82rem;"></span>
+        </div>
 
-    <button type="submit" class="btn btn-success">Save</button>
-</form>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn-pas-orange">Save Research Area</button>
+            <a asp-action="ResearchAreas" class="btn-pas-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
