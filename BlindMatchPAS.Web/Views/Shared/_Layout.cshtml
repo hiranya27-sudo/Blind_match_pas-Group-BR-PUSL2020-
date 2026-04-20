@@ -3,90 +3,491 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BlindMatchPAS.Web</title>
+    <title>@ViewData["Title"] - BlindMatchPAS</title>
+    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BlindMatchPAS.Web.styles.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+            :root {
+                --pas-blue:        #1a3a6b;
+                --pas-blue-mid:    #1e4fa8;
+                --pas-blue-light:  #e8eef8;
+                --pas-orange:      #f47c20;
+                --pas-orange-dark: #d9660f;
+                --pas-white:       #ffffff;
+                --pas-gray-bg:     #f4f6fb;
+                --pas-gray-text:   #5a6372;
+                --pas-border:      #dde3ef;
+                --pas-success:     #1a7a4a;
+                --pas-danger:      #c0392b;
+            }
+
+            * { box-sizing: border-box; }
+
+            body {
+                font-family: 'DM Sans', sans-serif;
+                background-color: var(--pas-gray-bg);
+                color: #1e2533;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* ── NAVBAR ── */
+            .pas-navbar {
+                background: var(--pas-blue);
+                padding: 0 1.5rem;
+                box-shadow: 0 2px 12px rgba(26,58,107,0.18);
+                position: sticky;
+                top: 0;
+                z-index: 1050;
+            }
+
+            .pas-navbar .navbar-brand {
+                font-family: 'Sora', sans-serif;
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: var(--pas-white) !important;
+                letter-spacing: -0.02em;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .pas-navbar .navbar-brand span.brand-dot {
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                background: var(--pas-orange);
+                border-radius: 50%;
+            }
+
+            .pas-navbar .nav-link {
+                color: rgba(255,255,255,0.82) !important;
+                font-size: 0.875rem;
+                font-weight: 500;
+                padding: 0.6rem 0.85rem !important;
+                border-radius: 6px;
+                transition: color 0.2s, background 0.2s;
+            }
+
+            .pas-navbar .nav-link:hover,
+            .pas-navbar .nav-link.active {
+                color: var(--pas-white) !important;
+                background: rgba(255,255,255,0.1);
+            }
+
+            .pas-navbar .navbar-toggler {
+                border-color: rgba(255,255,255,0.3);
+            }
+            .pas-navbar .navbar-toggler-icon {
+                filter: invert(1);
+            }
+
+            /* Dashboard link highlight */
+            .pas-navbar .nav-link.dashboard-link {
+                color: var(--pas-orange) !important;
+                font-weight: 600;
+            }
+            .pas-navbar .nav-link.dashboard-link:hover {
+                background: rgba(244,124,32,0.15);
+            }
+
+            /* Logout button */
+            .btn-logout {
+                background: var(--pas-orange);
+                color: var(--pas-white) !important;
+                border: none;
+                border-radius: 6px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                padding: 0.4rem 1rem;
+                cursor: pointer;
+                transition: background 0.2s, transform 0.1s;
+            }
+            .btn-logout:hover {
+                background: var(--pas-orange-dark);
+                transform: translateY(-1px);
+            }
+
+            /* Login / Register links */
+            .btn-nav-login {
+                color: rgba(255,255,255,0.85) !important;
+                border: 1px solid rgba(255,255,255,0.3);
+                border-radius: 6px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                padding: 0.38rem 0.9rem;
+                text-decoration: none;
+                transition: all 0.2s;
+            }
+            .btn-nav-login:hover {
+                background: rgba(255,255,255,0.1);
+                border-color: rgba(255,255,255,0.6);
+                color: var(--pas-white) !important;
+            }
+            .btn-nav-register {
+                background: var(--pas-orange);
+                color: var(--pas-white) !important;
+                border-radius: 6px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                padding: 0.38rem 0.9rem;
+                text-decoration: none;
+                transition: background 0.2s;
+            }
+            .btn-nav-register:hover {
+                background: var(--pas-orange-dark);
+                color: var(--pas-white) !important;
+            }
+
+            /* Notification badge dot */
+            .notif-badge {
+                display: inline-block;
+                width: 7px;
+                height: 7px;
+                background: var(--pas-orange);
+                border-radius: 50%;
+                margin-left: 4px;
+                vertical-align: middle;
+            }
+
+            /* ── MAIN CONTENT ── */
+            .pas-main {
+                flex: 1;
+                padding: 2rem 0 3rem;
+            }
+
+            /* ── GLOBAL CARD STYLE ── */
+            .pas-card {
+                background: var(--pas-white);
+                border: 1px solid var(--pas-border);
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(26,58,107,0.07);
+                padding: 2rem;
+            }
+
+            /* ── PAGE HEADER ── */
+            .pas-page-header {
+                margin-bottom: 1.75rem;
+            }
+            .pas-page-header h2 {
+                font-family: 'Sora', sans-serif;
+                font-size: 1.6rem;
+                font-weight: 700;
+                color: var(--pas-blue);
+                margin: 0;
+            }
+            .pas-page-header p {
+                color: var(--pas-gray-text);
+                margin: 0.25rem 0 0;
+                font-size: 0.93rem;
+            }
+
+            /* ── BUTTONS ── */
+            .btn-pas-primary {
+                background: var(--pas-blue-mid);
+                color: var(--pas-white);
+                border: none;
+                border-radius: 7px;
+                font-weight: 600;
+                font-size: 0.875rem;
+                padding: 0.5rem 1.2rem;
+                text-decoration: none;
+                display: inline-block;
+                transition: background 0.2s, transform 0.1s;
+            }
+            .btn-pas-primary:hover {
+                background: var(--pas-blue);
+                color: var(--pas-white);
+                transform: translateY(-1px);
+            }
+
+            .btn-pas-orange {
+                background: var(--pas-orange);
+                color: var(--pas-white);
+                border: none;
+                border-radius: 7px;
+                font-weight: 600;
+                font-size: 0.875rem;
+                padding: 0.5rem 1.2rem;
+                text-decoration: none;
+                display: inline-block;
+                transition: background 0.2s, transform 0.1s;
+            }
+            .btn-pas-orange:hover {
+                background: var(--pas-orange-dark);
+                color: var(--pas-white);
+                transform: translateY(-1px);
+            }
+
+            .btn-pas-danger {
+                background: var(--pas-danger);
+                color: var(--pas-white);
+                border: none;
+                border-radius: 7px;
+                font-weight: 600;
+                font-size: 0.875rem;
+                padding: 0.4rem 1rem;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .btn-pas-danger:hover { background: #a93226; color: var(--pas-white); }
+
+            .btn-pas-secondary {
+                background: var(--pas-white);
+                color: var(--pas-blue-mid);
+                border: 1.5px solid var(--pas-blue-mid);
+                border-radius: 7px;
+                font-weight: 600;
+                font-size: 0.875rem;
+                padding: 0.5rem 1.2rem;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.2s;
+            }
+            .btn-pas-secondary:hover {
+                background: var(--pas-blue-light);
+                color: var(--pas-blue);
+            }
+
+            /* ── TABLES ── */
+            .pas-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.9rem;
+            }
+            .pas-table thead tr {
+                background: var(--pas-blue);
+                color: var(--pas-white);
+            }
+            .pas-table thead th {
+                padding: 0.85rem 1rem;
+                font-weight: 600;
+                font-size: 0.8rem;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                border: none;
+            }
+            .pas-table tbody tr {
+                border-bottom: 1px solid var(--pas-border);
+                transition: background 0.15s;
+            }
+            .pas-table tbody tr:hover { background: var(--pas-blue-light); }
+            .pas-table tbody td {
+                padding: 0.8rem 1rem;
+                vertical-align: middle;
+                color: #2d3748;
+            }
+
+            /* ── STATUS BADGES ── */
+            .badge-status {
+                display: inline-block;
+                padding: 0.3em 0.75em;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                letter-spacing: 0.02em;
+            }
+            .badge-pending    { background: #fff3e0; color: #b45309; border: 1px solid #fcd34d; }
+            .badge-matched    { background: #e0f0ff; color: #1a3a6b; border: 1px solid #93c5fd; }
+            .badge-confirmed  { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+            .badge-withdrawn  { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+            .badge-interested { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+            .badge-read       { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+            .badge-unread     { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+
+            /* ── STAT CARDS ── */
+            .stat-card {
+                background: var(--pas-white);
+                border: 1px solid var(--pas-border);
+                border-radius: 10px;
+                padding: 1.25rem 1.5rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+                box-shadow: 0 1px 6px rgba(26,58,107,0.06);
+            }
+            .stat-card .stat-label {
+                font-size: 0.78rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: var(--pas-gray-text);
+            }
+            .stat-card .stat-value {
+                font-family: 'Sora', sans-serif;
+                font-size: 2rem;
+                font-weight: 700;
+                color: var(--pas-blue);
+                line-height: 1;
+            }
+            .stat-card.accent .stat-value { color: var(--pas-orange); }
+
+            /* ── FORMS ── */
+            .form-label {
+                font-weight: 600;
+                font-size: 0.875rem;
+                color: var(--pas-blue);
+                margin-bottom: 0.3rem;
+            }
+            .form-control, .form-select {
+                border: 1.5px solid var(--pas-border);
+                border-radius: 7px;
+                font-size: 0.9rem;
+                padding: 0.5rem 0.85rem;
+                transition: border-color 0.2s, box-shadow 0.2s;
+            }
+            .form-control:focus, .form-select:focus {
+                border-color: var(--pas-blue-mid);
+                box-shadow: 0 0 0 3px rgba(30,79,168,0.12);
+                outline: none;
+            }
+
+            /* ── ALERTS ── */
+            .alert-pas-error {
+                background: #fef2f2;
+                border: 1px solid #fca5a5;
+                color: #991b1b;
+                border-radius: 8px;
+                padding: 0.85rem 1.1rem;
+                font-size: 0.9rem;
+                margin-bottom: 1.25rem;
+            }
+            .alert-pas-info {
+                background: var(--pas-blue-light);
+                border: 1px solid #bfdbfe;
+                color: var(--pas-blue);
+                border-radius: 8px;
+                padding: 0.85rem 1.1rem;
+                font-size: 0.9rem;
+                margin-bottom: 1.25rem;
+            }
+
+            /* Empty state */
+            .empty-state {
+                text-align: center;
+                padding: 3rem 1rem;
+                color: var(--pas-gray-text);
+            }
+            .empty-state .empty-icon {
+                font-size: 2.5rem;
+                margin-bottom: 0.75rem;
+                opacity: 0.5;
+            }
+            .empty-state p { margin: 0; font-size: 0.95rem; }
+
+            /* ── FOOTER ── */
+            .pas-footer {
+                background: var(--pas-blue);
+                color: rgba(255,255,255,0.6);
+                font-size: 0.82rem;
+                padding: 1.1rem 0;
+                text-align: center;
+            }
+            .pas-footer a {
+                color: var(--pas-orange);
+                text-decoration: none;
+            }
+            .pas-footer a:hover { text-decoration: underline; }
+
+            /* ── EXPERTISE TAGS ── */
+            .expertise-tag {
+                display: inline-block;
+                background: var(--pas-blue-light);
+                color: var(--pas-blue-mid);
+                border: 1px solid #bfdbfe;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                padding: 0.3em 0.85em;
+                margin: 0.2em;
+            }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlindMatchPAS.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <nav class="pas-navbar navbar navbar-expand-md">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <span class="brand-dot"></span> BlindMatchPAS
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mainNav" aria-controls="mainNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+
+                    @if (User.IsInRole("Student"))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link dashboard-link" asp-controller="Student" asp-action="Dashboard">Student Dashboard</a>
                         </li>
+                    }
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Supervisor"))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link dashboard-link" asp-controller="Supervisor" asp-action="Dashboard">Supervisor Dashboard</a>
                         </li>
+                    }
 
-                        @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Student"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Student" asp-action="Dashboard">Student Dashboard</a>
-                            </li>
-                        }
-                        @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Supervisor"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Supervisor" asp-action="Dashboard">Supervisor Dashboard</a>
-                            </li>
-                        }
-                        @if (User.Identity != null && User.Identity.IsAuthenticated &&
-                        (User.IsInRole("ModuleLeader") || User.IsInRole("Admin")))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="ModuleLeader" asp-action="Dashboard">Module Leader Dashboard</a>
-                            </li>
-                        }
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Notification" asp-action="Index">Notifications</a>
-                            </li>
-                        }
-                    </ul>
+                    @if (User.Identity != null && User.Identity.IsAuthenticated &&
+                         (User.IsInRole("ModuleLeader") || User.IsInRole("Admin")))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link dashboard-link" asp-controller="ModuleLeader" asp-action="Dashboard">Module Leader Dashboard</a>
+                        </li>
+                    }
 
-                    <ul class="navbar-nav">
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
-                            </li>
-                        }
-                    </ul>
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Notification" asp-action="Index">
+                                Notifications <span class="notif-badge"></span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                            <button type="submit" class="btn-logout">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn-nav-login">Login</a>
+                        <a asp-controller="Account" asp-action="Register" class="btn-nav-register">Register</a>
+                    }
                 </div>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+    <main class="pas-main" role="main">
         <div class="container">
-            &copy; 2026 - BlindMatchPAS.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="pas-footer">
+        <div class="container">
+            &copy; 2026 BlindMatchPAS &mdash;
+            <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
         </div>
     </footer>
 
