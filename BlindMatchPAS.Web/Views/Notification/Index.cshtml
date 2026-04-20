@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BlindMatchPAS.Core.Entities.Notification>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<h2>Notifications</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var notification in Model)
+        {
+            <tr>
+                <td>@notification.Message</td>
+                <td>@notification.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@(notification.IsRead ? "Read" : "Unread")</td>
+                <td>
+                    @if (!notification.IsRead)
+                    {
+                        <form asp-action="MarkAsRead" asp-route-id="@notification.Id" method="post">
+                            <button type="submit" class="btn btn-sm btn-primary">Mark as Read</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
