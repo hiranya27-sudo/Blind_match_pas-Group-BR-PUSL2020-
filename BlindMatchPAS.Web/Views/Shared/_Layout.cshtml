@@ -46,6 +46,12 @@
                                 <a class="nav-link text-dark" asp-controller="ModuleLeader" asp-action="Dashboard">Module Leader Dashboard</a>
                             </li>
                         }
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Notification" asp-action="Index">Notifications</a>
+                            </li>
+                        }
                     </ul>
 
                     <ul class="navbar-nav">
