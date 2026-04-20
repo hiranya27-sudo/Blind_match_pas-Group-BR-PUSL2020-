@@ -1,8 +1,86 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div style="text-align:center;padding:4rem 1rem 3rem;">
+    <div style="display:inline-block;background:var(--pas-blue);color:white;
+        font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+        padding:0.35em 1em;border-radius:20px;margin-bottom:1.25rem;">
+        Project Allocation System
+    </div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:2.8rem;font-weight:700;
+        color:var(--pas-blue);line-height:1.15;margin-bottom:1rem;">
+        Blind Match<span style="color:var(--pas-orange);">PAS</span>
+    </h1>
+    <p style="font-size:1.1rem;color:var(--pas-gray-text);max-width:520px;
+        margin:0 auto 2.25rem;line-height:1.7;">
+        A fair, anonymous project allocation platform connecting students with supervisors
+        based on research interests — not bias.
+    </p>
+
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            @if (User.IsInRole("Student"))
+            {
+                <a asp-controller="Student" asp-action="Dashboard" class="btn-pas-orange" style="padding:0.7rem 1.8rem;font-size:1rem;">
+                    Go to Dashboard
+                </a>
+            }
+            @if (User.IsInRole("Supervisor"))
+            {
+                <a asp-controller="Supervisor" asp-action="Dashboard" class="btn-pas-orange" style="padding:0.7rem 1.8rem;font-size:1rem;">
+                    Go to Dashboard
+                </a>
+            }
+            @if (User.IsInRole("ModuleLeader") || User.IsInRole("Admin"))
+            {
+                <a asp-controller="ModuleLeader" asp-action="Dashboard" class="btn-pas-orange" style="padding:0.7rem 1.8rem;font-size:1rem;">
+                    Go to Dashboard
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a asp-controller="Account" asp-action="Login" class="btn-pas-primary" style="padding:0.7rem 1.8rem;font-size:1rem;">
+                Sign In
+            </a>
+            <a asp-controller="Account" asp-action="Register" class="btn-pas-orange" style="padding:0.7rem 1.8rem;font-size:1rem;">
+                Create Account
+            </a>
+        </div>
+    }
+</div>
+
+<!-- Feature highlights -->
+<div class="row g-3 mt-2 pb-4" style="max-width:860px;margin:0 auto;">
+    <div class="col-md-4">
+        <div class="pas-card text-center" style="padding:1.5rem;">
+            <div style="font-size:1.8rem;margin-bottom:0.6rem;">🎓</div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;color:var(--pas-blue);margin-bottom:0.4rem;">Students</div>
+            <p style="font-size:0.875rem;color:var(--pas-gray-text);margin:0;">
+                Submit project proposals and get matched with the right supervisor anonymously.
+            </p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="pas-card text-center" style="padding:1.5rem;">
+            <div style="font-size:1.8rem;margin-bottom:0.6rem;">🔬</div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;color:var(--pas-blue);margin-bottom:0.4rem;">Supervisors</div>
+            <p style="font-size:0.875rem;color:var(--pas-gray-text);margin:0;">
+                Browse anonymous proposals and express interest based purely on research fit.
+            </p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="pas-card text-center" style="padding:1.5rem;">
+            <div style="font-size:1.8rem;margin-bottom:0.6rem;">⚖️</div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;color:var(--pas-blue);margin-bottom:0.4rem;">Module Leaders</div>
+            <p style="font-size:0.875rem;color:var(--pas-gray-text);margin:0;">
+                Oversee all matches, manage research areas, and reassign supervisors when needed.
+            </p>
+        </div>
+    </div>
 </div>

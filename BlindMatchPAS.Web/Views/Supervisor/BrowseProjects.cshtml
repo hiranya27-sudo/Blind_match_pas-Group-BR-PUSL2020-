@@ -4,32 +4,59 @@
     ViewData["Title"] = "Browse Anonymous Projects";
 }
 
-<h2>Browse Anonymous Projects</h2>
+<div class="pas-page-header d-flex justify-content-between align-items-start flex-wrap gap-2">
+    <div>
+        <h2>Browse Anonymous Projects</h2>
+        <p>Student identities are hidden — express interest based on research fit alone</p>
+    </div>
+    <a asp-action="Dashboard" class="btn-pas-secondary">← Back to Dashboard</a>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Abstract</th>
-            <th>Research Area</th>
-            <th>Student</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var project in Model)
-        {
-            <tr>
-                <td>@project.Title</td>
-                <td>@project.Abstract</td>
-                <td>@project.ResearchArea?.Name</td>
-                <td>Hidden</td>
-                <td>
-                    <form asp-action="ExpressInterest" asp-route-projectId="@project.Id" method="post">
-                        <button type="submit" class="btn btn-warning btn-sm">Express Interest</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="pas-card">
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="pas-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Abstract</th>
+                        <th>Research Area</th>
+                        <th style="width:80px;">Student</th>
+                        <th style="width:150px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var project in Model)
+                    {
+                        <tr>
+                            <td style="font-weight:500;min-width:160px;">@project.Title</td>
+                            <td style="font-size:0.87rem;color:var(--pas-gray-text);max-width:320px;">
+                                @project.Abstract
+                            </td>
+                            <td>@project.ResearchArea?.Name</td>
+                            <td>
+                                <span style="color:var(--pas-gray-text);font-size:0.85rem;font-style:italic;">Hidden</span>
+                            </td>
+                            <td>
+                                <form asp-action="ExpressInterest" asp-route-projectId="@project.Id" method="post">
+                                    <button type="submit" class="btn-pas-orange"
+                                            style="font-size:0.8rem;padding:0.38rem 0.9rem;">
+                                        Express Interest
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <p>No projects available to browse right now.</p>
+        </div>
+    }
+</div>

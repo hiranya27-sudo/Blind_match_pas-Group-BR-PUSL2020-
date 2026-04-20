@@ -4,29 +4,62 @@
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
+<div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+        <div class="pas-card mt-4">
+            <div class="text-center mb-4">
+                <div style="display:inline-flex;align-items:center;justify-content:center;
+                    width:52px;height:52px;background:var(--pas-blue);
+                    border-radius:12px;margin-bottom:1rem;">
+                    <svg width="26" height="26" fill="none" viewBox="0 0 24 24">
+                        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" fill="white" />
+                    </svg>
+                </div>
+                <h2 class="pas-page-header" style="margin-bottom:0;">
+                    <div style="font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:700;color:var(--pas-blue);">Welcome back</div>
+                </h2>
+                <p style="color:var(--pas-gray-text);font-size:0.9rem;margin-top:0.3rem;">Sign in to your BlindMatchPAS account</p>
+            </div>
 
-<form asp-action="Login" method="post">
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="All" class="alert-pas-error" style="display:none;"></div>
+                @if (ViewData.ModelState.ErrorCount > 0)
+                {
+                    <div class="alert-pas-error">
+                        <div asp-validation-summary="All"></div>
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email address</label>
+                    <input asp-for="Email" class="form-control" placeholder="you@example.com" />
+                    <span asp-validation-for="Email" class="text-danger" style="font-size:0.82rem;"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" class="form-control" placeholder="••••••••" />
+                    <span asp-validation-for="Password" class="text-danger" style="font-size:0.82rem;"></span>
+                </div>
+
+                <div class="mb-4 d-flex align-items-center gap-2">
+                    <input asp-for="RememberMe" type="checkbox" class="form-check-input" style="margin:0;" />
+                    <label asp-for="RememberMe" class="form-label mb-0" style="font-weight:500;color:var(--pas-gray-text);">Remember me</label>
+                </div>
+
+                <button type="submit" class="btn-pas-orange w-100" style="padding:0.65rem;font-size:0.95rem;text-align:center;">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="text-center mt-3" style="font-size:0.875rem;color:var(--pas-gray-text);">
+                Don't have an account?
+                <a asp-controller="Account" asp-action="Register"
+                   style="color:var(--pas-blue-mid);font-weight:600;text-decoration:none;">Register here</a>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <div>
-        <input asp-for="RememberMe" type="checkbox" />
-        <label asp-for="RememberMe"></label>
-    </div>
-
-    <br />
-    <button type="submit" class="btn btn-success">Login</button>
-</form><div asp-validation-summary="All" class="text-danger"></div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

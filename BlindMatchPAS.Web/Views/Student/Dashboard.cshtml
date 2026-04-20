@@ -4,41 +4,84 @@
     ViewData["Title"] = "Student Dashboard";
 }
 
-<h2>Student Dashboard</h2>
+<div class="pas-page-header d-flex justify-content-between align-items-start flex-wrap gap-2">
+    <div>
+        <h2>Student Dashboard</h2>
+        <p>Track your project proposals and their status</p>
+    </div>
+    <a asp-action="Create" class="btn-pas-orange">+ Submit New Proposal</a>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Submit New Proposal</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Research Area</th>
-            <th>Status</th>
-            <th>Created</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var project in Model)
-        {
-            <tr>
-                <td>@project.Title</td>
-                <td>@project.ResearchArea?.Name</td>
-                <td>@project.Status</td>
-                <td>@project.CreatedAt.ToString("yyyy-MM-dd")</td>
-                <td>
-                    @if (project.Status == BlindMatchPAS.Core.Enums.ProjectStatus.Pending)
+<div class="pas-card">
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="pas-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Research Area</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th style="width:160px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var project in Model)
                     {
-                        <a asp-action="Edit" asp-route-id="@project.Id" class="btn btn-warning btn-sm">Edit</a>
-
-                        <form asp-action="Withdraw" asp-route-id="@project.Id" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-danger btn-sm">Withdraw</button>
-                        </form>
+                        <tr>
+                            <td style="font-weight:500;">@project.Title</td>
+                            <td>@project.ResearchArea?.Name</td>
+                            <td>
+                                @{
+                                    var status = project.Status.ToString().ToLower();
+                                    var badge = status switch
+                                    {
+                                        "pending" => "badge-pending",
+                                        "matched" => "badge-matched",
+                                        "confirmed" => "badge-confirmed",
+                                        "withdrawn" => "badge-withdrawn",
+                                        _ => "badge-read"
+                                    };
+                                }
+                                <span class="badge-status @badge">@project.Status</span>
+                            </td>
+                            <td style="color:var(--pas-gray-text);font-size:0.87rem;">
+                                @project.CreatedAt.ToString("yyyy-MM-dd")
+                            </td>
+                            <td>
+                                @if (project.Status == BlindMatchPAS.Core.Enums.ProjectStatus.Pending)
+                                {
+                                    <div class="d-flex gap-1">
+                                        <a asp-action="Edit" asp-route-id="@project.Id"
+                                               class="btn-pas-secondary" style="font-size:0.78rem;padding:0.3rem 0.75rem;">
+                                            Edit
+                                        </a>
+                                        <form asp-action="Withdraw" asp-route-id="@project.Id"
+                                              method="post" style="display:inline;">
+                                            <button type="submit" class="btn-pas-danger"
+                                                    style="font-size:0.78rem;padding:0.3rem 0.75rem;"
+                                                    onclick="return confirm('Withdraw this proposal?')">
+                                                Withdraw
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon">📄</div>
+            <p>You haven't submitted any proposals yet.</p>
+            <a asp-action="Create" class="btn-pas-orange" style="display:inline-block;margin-top:1rem;">
+                Submit Your First Proposal
+            </a>
+        </div>
+    }
+</div>

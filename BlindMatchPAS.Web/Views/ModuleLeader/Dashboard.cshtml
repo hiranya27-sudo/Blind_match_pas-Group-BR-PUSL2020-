@@ -5,68 +5,154 @@
     var matches = ViewBag.Matches as IEnumerable<BlindMatchPAS.Core.Entities.Match>;
 }
 
-<h2>Module Leader Dashboard</h2>
-
-<div class="mb-3">
-    <strong>Total Projects:</strong> @ViewBag.TotalProjects |
-    <strong>Pending Projects:</strong> @ViewBag.PendingProjects |
-    <strong>Total Matches:</strong> @ViewBag.TotalMatches |
-    <strong>Confirmed Matches:</strong> @ViewBag.ConfirmedMatches
+<div class="pas-page-header d-flex justify-content-between align-items-start flex-wrap gap-2">
+    <div>
+        <h2>Module Leader Dashboard</h2>
+        <p>Overview of all projects and supervisor matches</p>
+    </div>
+    <a asp-action="ResearchAreas" class="btn-pas-primary">
+        Manage Research Areas
+    </a>
 </div>
 
-<p>
-    <a asp-action="ResearchAreas" class="btn btn-primary">Manage Research Areas</a>
-</p>
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <span class="stat-label">Total Projects</span>
+            <span class="stat-value">@ViewBag.TotalProjects</span>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <span class="stat-label">Pending Projects</span>
+            <span class="stat-value accent" style="color:var(--pas-orange);">@ViewBag.PendingProjects</span>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <span class="stat-label">Total Matches</span>
+            <span class="stat-value">@ViewBag.TotalMatches</span>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <span class="stat-label">Confirmed Matches</span>
+            <span class="stat-value" style="color:var(--pas-success);">@ViewBag.ConfirmedMatches</span>
+        </div>
+    </div>
+</div>
 
-<h4>All Projects</h4>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Student</th>
-            <th>Research Area</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var project in Model)
+<!-- All Projects -->
+<div class="pas-card mb-4">
+    <h5 style="font-family:'Sora',sans-serif;color:var(--pas-blue);font-weight:700;margin-bottom:1.1rem;">
+        All Projects
+    </h5>
+    @if (Model != null && Model.Any())
     {
-        <tr>
-            <td>@project.Title</td>
-            <td>@project.Student?.FullName</td>
-            <td>@project.ResearchArea?.Name</td>
-            <td>@project.Status</td>
-        </tr>
+        <div class="table-responsive">
+            <table class="pas-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Student</th>
+                        <th>Research Area</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var project in Model)
+                    {
+                        <tr>
+                            <td style="font-weight:500;">@project.Title</td>
+                            <td>@project.Student?.FullName</td>
+                            <td>@project.ResearchArea?.Name</td>
+                            <td>
+                                @{
+                                    var pStatus = project.Status.ToString().ToLower();
+                                    var pBadge = pStatus switch
+                                    {
+                                        "pending" => "badge-pending",
+                                        "matched" => "badge-matched",
+                                        "confirmed" => "badge-confirmed",
+                                        "withdrawn" => "badge-withdrawn",
+                                        _ => "badge-read"
+                                    };
+                                }
+                                <span class="badge-status @pBadge">@project.Status</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
-    </tbody>
-</table>
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <p>No projects submitted yet.</p>
+        </div>
+    }
+</div>
 
-<h4>All Matches</h4>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Project</th>
-            <th>Supervisor</th>
-            <th>Status</th>
-            <th>Student</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    @if (matches != null)
+<!-- All Matches -->
+<div class="pas-card">
+    <h5 style="font-family:'Sora',sans-serif;color:var(--pas-blue);font-weight:700;margin-bottom:1.1rem;">
+        All Matches
+    </h5>
+    @if (matches != null && matches.Any())
     {
-        foreach (var match in matches)
-        {
-            <tr>
-                <td>@match.Project?.Title</td>
-                <td>@match.Supervisor?.FullName</td>
-                <td>@match.Status</td>
-                <td>@match.Project?.Student?.FullName</td>
-                <td>
-                    <a asp-action="Reassign" asp-route-matchId="@match.Id" class="btn btn-warning btn-sm">Reassign</a>
-                </td>
-            </tr>
-        }
+        <div class="table-responsive">
+            <table class="pas-table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Supervisor</th>
+                        <th>Student</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var match in matches)
+                    {
+                        <tr>
+                            <td style="font-weight:500;">@match.Project?.Title</td>
+                            <td>@match.Supervisor?.FullName</td>
+                            <td>@match.Project?.Student?.FullName</td>
+                            <td>
+                                @{
+                                    var mStatus = match.Status.ToString().ToLower();
+                                    var mBadge = mStatus switch
+                                    {
+                                        "pending" => "badge-pending",
+                                        "matched" => "badge-matched",
+                                        "confirmed" => "badge-confirmed",
+                                        "withdrawn" => "badge-withdrawn",
+                                        "interested" => "badge-interested",
+                                        _ => "badge-read"
+                                    };
+                                }
+                                <span class="badge-status @mBadge">@match.Status</span>
+                            </td>
+                            <td>
+                                <a asp-action="Reassign" asp-route-matchId="@match.Id"
+                                       class="btn-pas-secondary" style="font-size:0.8rem;padding:0.35rem 0.85rem;">
+                                    Reassign
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
-    </tbody>
-</table>
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon">🔗</div>
+            <p>No matches have been created yet.</p>
+        </div>
+    }
+</div>

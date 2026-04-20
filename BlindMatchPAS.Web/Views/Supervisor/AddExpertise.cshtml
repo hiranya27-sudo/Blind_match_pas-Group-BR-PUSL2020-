@@ -4,25 +4,38 @@
     ViewData["Title"] = "Add Expertise";
 }
 
-<h2>Add Expertise</h2>
+<div class="pas-page-header">
+    <h2>Add Expertise</h2>
+    <p>Register a research area you can supervise</p>
+</div>
 
-<form asp-action="AddExpertise" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
+<div class="pas-card" style="max-width:520px;">
+    <form asp-action="AddExpertise" method="post">
+        @if (ViewData.ModelState.ErrorCount > 0)
+        {
+            <div class="alert-pas-error">
+                <div asp-validation-summary="All"></div>
+            </div>
+        }
 
-    <div class="mb-3">
-        <label asp-for="ResearchAreaId"></label>
-        <select asp-for="ResearchAreaId" class="form-control">
-            <option value="">-- Select Research Area --</option>
-            @foreach (var area in ViewBag.ResearchAreas)
-            {
-                <option value="@area.Id">@area.Name</option>
-            }
-        </select>
-        <span asp-validation-for="ResearchAreaId" class="text-danger"></span>
-    </div>
+        <div class="mb-4">
+            <label asp-for="ResearchAreaId" class="form-label">Research Area</label>
+            <select asp-for="ResearchAreaId" class="form-control form-select">
+                <option value="">-- Select a Research Area --</option>
+                @foreach (var area in ViewBag.ResearchAreas)
+                {
+                    <option value="@area.Id">@area.Name</option>
+                }
+            </select>
+            <span asp-validation-for="ResearchAreaId" class="text-danger" style="font-size:0.82rem;"></span>
+        </div>
 
-    <button type="submit" class="btn btn-primary">Add</button>
-</form>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn-pas-orange">Add Expertise</button>
+            <a asp-action="Dashboard" class="btn-pas-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

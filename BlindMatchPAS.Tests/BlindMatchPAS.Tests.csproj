@@ -27,10 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Integration\" />
     <Folder Include="Helpers\" />
     <Folder Include="Mocks\" />
-    <Folder Include="Unit\" />
   </ItemGroup>
 
 </Project>
