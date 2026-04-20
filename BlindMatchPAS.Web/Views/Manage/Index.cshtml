@@ -1,0 +1,50 @@
+﻿@model BlindMatchPAS.Web.ViewModels.ManageProfileViewModel
+
+@{
+    ViewData["Title"] = "My Account";
+}
+
+<div class="pas-page-header">
+    <h2>My Account</h2>
+    <p>Manage your profile information</p>
+</div>
+
+@if (ViewBag.StatusMessage != null)
+{
+    <div class="alert-pas-info" style="max-width:520px;">
+        ✓ @ViewBag.StatusMessage
+    </div>
+}
+
+<div class="pas-card" style="max-width:520px;">
+    <form asp-action="Index" method="post">
+        @if (ViewData.ModelState.ErrorCount > 0)
+        {
+            <div class="alert-pas-error">
+                <div asp-validation-summary="All"></div>
+            </div>
+        }
+
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label">Full Name</label>
+            <input asp-for="FullName" class="form-control" placeholder="Your full name" />
+            <span asp-validation-for="FullName" class="text-danger" style="font-size:0.82rem;"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Email" class="form-label">Email address</label>
+            <input asp-for="Email" class="form-control" readonly
+                   style="background:var(--pas-gray-bg);color:var(--pas-gray-text);cursor:not-allowed;" />
+            <small style="color:var(--pas-gray-text);font-size:0.8rem;">Email cannot be changed.</small>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+            <button type="submit" class="btn-pas-orange">Update Profile</button>
+            <a asp-action="ChangePassword" class="btn-pas-secondary">Change Password</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

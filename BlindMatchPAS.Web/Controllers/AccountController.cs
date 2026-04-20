@@ -3,6 +3,7 @@ using BlindMatchPAS.Core.Enums;
 using BlindMatchPAS.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace BlindMatchPAS.Web.Controllers
 {
@@ -103,6 +104,85 @@ namespace BlindMatchPAS.Web.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
+        }
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                ViewBag.Message = "If the email exists, a reset link has been generated.";
+                return View();
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = Uri.EscapeDataString(token);
+
+            var resetLink = Url.Action(
+                "ResetPassword",
+                "Account",
+                new { email = user.Email, token = encodedToken },
+                Request.Scheme);
+
+            ViewBag.Message = "Password reset link generated successfully.";
+            ViewBag.ResetLink = resetLink;
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+                return BadRequest();
+
+            var model = new ResetPasswordViewModel
+            {
+                Email = email,
+                Token = token
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid password reset request.");
+                return View(model);
+            }
+
+            var decodedToken = Uri.UnescapeDataString(model.Token);
+
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, model.Password);
+
+            if (result.Succeeded)
+            {
+                TempData["StatusMessage"] = "Password has been reset successfully.";
+                return RedirectToAction("Login");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+
+            return View(model);
         }
     }
 }
