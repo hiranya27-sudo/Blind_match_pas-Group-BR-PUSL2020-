@@ -4,45 +4,59 @@
     ViewData["Title"] = "Edit Proposal";
 }
 
-<h2>Edit Proposal</h2>
+<div class="pas-page-header">
+    <h2>Edit Proposal</h2>
+    <p>Update your project details before it is matched</p>
+</div>
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div asp-validation-summary="All" class="text-danger"></div>
+<div class="pas-card" style="max-width:640px;">
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
 
-    <div class="mb-3">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
+        @if (ViewData.ModelState.ErrorCount > 0)
+        {
+            <div class="alert-pas-error">
+                <div asp-validation-summary="All"></div>
+            </div>
+        }
 
-    <div class="mb-3">
-        <label asp-for="Abstract"></label>
-        <textarea asp-for="Abstract" class="form-control"></textarea>
-        <span asp-validation-for="Abstract" class="text-danger"></span>
-    </div>
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Project Title</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger" style="font-size:0.82rem;"></span>
+        </div>
 
-    <div class="mb-3">
-        <label asp-for="ResearchAreaId"></label>
-        <select asp-for="ResearchAreaId" class="form-control">
-            <option value="">-- Select Research Area --</option>
-            @foreach (var area in ViewBag.ResearchAreas)
-            {
-                if (area.Id == Model.ResearchAreaId)
+        <div class="mb-3">
+            <label asp-for="Abstract" class="form-label">Abstract</label>
+            <textarea asp-for="Abstract" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Abstract" class="text-danger" style="font-size:0.82rem;"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="ResearchAreaId" class="form-label">Research Area</label>
+            <select asp-for="ResearchAreaId" class="form-control form-select">
+                <option value="">-- Select Research Area --</option>
+                @foreach (var area in ViewBag.ResearchAreas)
                 {
-                    <option value="@area.Id" selected>@area.Name</option>
+                    if (area.Id == Model.ResearchAreaId)
+                    {
+                        <option value="@area.Id" selected>@area.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@area.Id">@area.Name</option>
+                    }
                 }
-                else
-                {
-                    <option value="@area.Id">@area.Name</option>
-                }
-            }
-        </select>
-        <span asp-validation-for="ResearchAreaId" class="text-danger"></span>
-    </div>
+            </select>
+            <span asp-validation-for="ResearchAreaId" class="text-danger" style="font-size:0.82rem;"></span>
+        </div>
 
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn-pas-orange">Update Proposal</button>
+            <a asp-action="Dashboard" class="btn-pas-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
