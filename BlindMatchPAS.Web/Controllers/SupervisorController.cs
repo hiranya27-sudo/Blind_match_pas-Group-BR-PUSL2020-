@@ -145,6 +145,21 @@ namespace BlindMatchPAS.Web.Controllers
             if (match.Project != null)
             {
                 match.Project.Status = ProjectStatus.Matched;
+
+                var studentNotification = new Notification
+                {
+                    UserId = match.Project.StudentId,
+                    Message = $"Your project '{match.Project.Title}' has been matched with a supervisor."
+                };
+
+                var supervisorNotification = new Notification
+                {
+                    UserId = user!.Id,
+                    Message = $"You confirmed a match for project '{match.Project.Title}'."
+                };
+
+                _context.Notifications.Add(studentNotification);
+                _context.Notifications.Add(supervisorNotification);
             }
 
             await _context.SaveChangesAsync();
