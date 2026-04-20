@@ -14,8 +14,9 @@ namespace BlindMatchPAS.Infrastructure.Data
         public DbSet<ResearchArea> ResearchAreas { get; set; }
         public DbSet<SupervisorExpertise> SupervisorExpertises { get; set; }
         public DbSet<Match> Matches { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
-      protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder builder)
         { 
             base.OnModelCreating(builder);
 
